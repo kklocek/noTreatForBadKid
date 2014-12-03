@@ -8,13 +8,14 @@ function Player(game) {
 	this.game = game;
 	this.points = 0;
 	this.direction = SOUTH; 
+	this.player = null;
 
 
 }
 
 Player.prototype.create = function() {
 	// game.load.image()
-	//game.load.spritesheet();
+	this.player = game.add.sprite(game.width - 50, game.height - 50, 'player');
 	// itede
 };
 
@@ -23,5 +24,5 @@ Player.prototype.update = function() {
 };
 
 Player.prototype.preload = function() {
-	// body...
+	this.game.load.spritesheet('player', 'gfx/player.png', 32, 32);
 };
