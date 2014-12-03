@@ -1,7 +1,7 @@
 //main.js
 (function() {
 var testState, testPlayer, bullet;
-var game, cursors, direction, controlButton;
+var game, cursors, direction, controlButton, enemy = null;
 
 window.onload = function() {
 	game = new Phaser.Game(640,480, Phaser.CANVAS, "gameWindow");
@@ -16,6 +16,7 @@ testState = {
 		game.load.image('testPlayer', 'gfx/player3.png');
 		game.load.image('bullet', 'gfx/bullet.png');
 		game.load.image('tile', 'gfx/tile.png');
+		game.load.image('enemy', 'gfx/enemy2.png');
     },
 
     create: function() {
@@ -26,6 +27,10 @@ testState = {
 	  	testPlayer.collideWorldBounds = true;
 	  	cursors = game.input.keyboard.createCursorKeys();
 	  	game.add.tileSprite(0, 0, 640, 480, 'tile');
+
+	  	enemy = game.add.sprite(100, game.height - 100, 'enemy');
+	  	game.physics.arcade.enable(enemy);
+	  	game.debug.spriteInfo(enemy, 32, 32);
 
 	  	
     },
@@ -68,9 +73,34 @@ testState = {
 			else if(direction == 4)
 				bullet.body.velocity.x = -100;
 		}
+
+		
+		testPlayer.bringToTop();
+		//enemy move
+		game.physics.arcade.collide(bullet, enemy, killHim);
+
+		if(!enemy) {
+			enemy = game.add.sprite(100, game.height - 100, 'enemy');
+	  		game.physics.arcade.enable(enemy);
+		}
+		
+		game.physics.arcade.moveToObject(enemy, testPlayer, 10);
+
+		
     
-    testPlayer.bringToTop();
+    	
+    	//game.debug.spriteInfo(enemy, 32, 32);
     }
 		
+  }
+
+  function killHim(bullet, enemy) {
+  	//enemy.body.checkCollision = {up: false, down:false, right: false, left: false};
+  	//bullet.body.checkCollision = {up: false, down:false, right: false, left: false};
+  	//enemy.destroy();
+  	//enemy.body.velocity.x = 0;
+  	//enemy.body.velocity.y = 0;
+  	bullet.destroy();
+  	enemy.destroy();
   }
 })()
