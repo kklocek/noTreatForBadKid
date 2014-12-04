@@ -77,17 +77,19 @@ testState = {
 		
 		testPlayer.bringToTop();
 		//enemy move
-		game.physics.arcade.collide(bullet, enemy, killHim);
+		
 
-		if(!enemy) {
+		if(!enemy.game) {
 			enemy = game.add.sprite(100, game.height - 100, 'enemy');
 	  		game.physics.arcade.enable(enemy);
 		}
 		
-		game.physics.arcade.moveToObject(enemy, testPlayer, 10);
+		//
+		if(enemy.game)
+			game.physics.arcade.moveToObject(enemy, testPlayer, 10);
 
-		
-    
+		game.physics.arcade.collide(bullet, enemy, killHim);
+    	//console.log(enemy);
     	
     	//game.debug.spriteInfo(enemy, 32, 32);
     }
@@ -102,5 +104,6 @@ testState = {
   	//enemy.body.velocity.y = 0;
   	bullet.destroy();
   	enemy.destroy();
+  	//enemy.kill(); //kill() a destroy()?
   }
 })()
