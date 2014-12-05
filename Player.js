@@ -17,15 +17,18 @@ Player.prototype.create = function() {
 	// game.load.image()
 	//this.game.physics.startSystem(Phaser.Physics.ARCADE);
 	//this.player = game.add.sprite(game.width - 50, game.height - 50, 'player');
-	this.player = game.add.sprite(10, game.height - 50, 'player');
+	//var x = this.game.add.sprite(10, game.height - 50, 'player');
+
+	this.player = this.game.add.sprite(10, this.game.height - 50, 'player');
 
 	this.game.physics.arcade.enable(this.player);
 	this.player.collideWorldBounds = true;
+	this.player.checkWorldBounds = true;
 	// itede
 };
 
 Player.prototype.update = function() {
-	// body...
+	this.checkControl();
 };
 
 Player.prototype.preload = function() {
@@ -34,32 +37,32 @@ Player.prototype.preload = function() {
 
 Player.prototype.checkControl = function() {
 
-		if(this.game.input.keyboard.isDown()) //ZMIENIĆ NA Phaser.Keyboard.isDown etc
+		if(this.game.input.keyboard.isDown(38)) //up
 		{
 			//this.player.body.velocity.y = -50;
 			this.player.body.y -= 4;
 			this.direction = 1;
 		}
-		else if(this.game.input.keyboard.isDown()) 
+		else if(this.game.input.keyboard.isDown(40)) //down 
 		{
 			this.player.body.y += 4;
 			this.direction = 3;
 		}
-		else if(this.game.input.keyboard.isDown())
+		else if(this.game.input.keyboard.isDown(37)) //left
 		{
 			this.player.body.x -= 4;
 			this.direction = 4;
 		}
-		else if(this.game.input.keyboard.isDown())
+		else if(this.game.input.keyboard.isDown(39)) //right
 		{
 			this.player.body.x += 4;
 			this.direction = 2;
 		}
-		else if(game.input.keyboard.justPressed(17, 50))
+		else if(this.game.input.keyboard.justPressed(17, 50))
 		{
-			//console.log('working');
-			bullet = game.add.sprite(this.player.body.x, this.player.body.y, 'bullet');
-			game.physics.enable(bullet);
+			/*
+			var bullet = this.game.add.sprite(this.player.body.x, this.player.body.y, 'bullet');
+			this.game.physics.enable(bullet);
 			if(this.direction == 1)
 				bullet.body.velocity.y = -100;
 			else if(this.direction == 2)
@@ -68,9 +71,16 @@ Player.prototype.checkControl = function() {
 				bullet.body.velocity.y = 100;
 			else if(this.direction == 4)
 				bullet.body.velocity.x = -100; //Tutaj wrzucić konstruktor do bullet :)
+			*/
+			var bullet = new Bullet(this.game, this.direction, this.getPlayer());
+			bullet.update();
 		}
 
-		
-		this.player.bringToTop();
+		if(this.player != null)
+			this.player.bringToTop();
 		
 };
+
+Player.prototype.getPlayer = function() {
+	return this.player;
+}
