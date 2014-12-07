@@ -6,12 +6,10 @@ function Player(game, bulletFactory) {
 	var WEST = 4;
 
 	this.game = game;
-	this.points = 0;
+	this.points = 1;
 	this.direction = SOUTH; 
 	this.player = null;
 	this.bulletFactory = bulletFactory;
-
-
 }
 
 Player.prototype.create = function() {
@@ -21,7 +19,7 @@ Player.prototype.create = function() {
 	this.game.physics.arcade.enable(this.player);
 	this.player.collideWorldBounds = true;
 	this.player.checkWorldBounds = true;
-	// itede
+	//this.points = 0;
 };
 
 Player.prototype.update = function() {
@@ -34,7 +32,7 @@ Player.prototype.preload = function() {
 
 Player.prototype.checkControl = function() {
 
-		if(this.game.input.keyboard.isDown(38) && this.player.body.y > 0) //up
+		if(this.game.input.keyboard.isDown(38) && this.player.body.y > 32) //up
 		{
 			//this.player.body.velocity.y = -50;
 			this.player.body.y -= 4;
@@ -57,19 +55,6 @@ Player.prototype.checkControl = function() {
 		}
 		else if(this.game.input.keyboard.justPressed(17, 50))
 		{
-			/*
-			var bullet = this.game.add.sprite(this.player.body.x, this.player.body.y, 'bullet');
-			this.game.physics.enable(bullet);
-			if(this.direction == 1)
-				bullet.body.velocity.y = -100;
-			else if(this.direction == 2)
-				bullet.body.velocity.x = 100;
-			else if(this.direction == 3)
-				bullet.body.velocity.y = 100;
-			else if(this.direction == 4)
-				bullet.body.velocity.x = -100; //Tutaj wrzucić konstruktor do bullet :)
-			*/
-			//var bullet = new Bullet(this.game, this.direction, this.getPlayer());
 			var bullet = this.bulletFactory.create(this.player.body.x, this.player.body.y, this.direction);
 		}
 
@@ -80,4 +65,23 @@ Player.prototype.checkControl = function() {
 
 Player.prototype.getPlayer = function() {
 	return this.player;
+}
+
+Player.prototype.addPoints = function(bullet, enemy) {
+	//console.log(this.points);
+	this.points = this.points + 1;
+	//console.log(this.points);
+	//console.log(Number(this.points));
+	//bullet.killHim(bullet, enemy);
+	bullet.kill();
+	enemy.kill();
+}
+
+Player.prototype.checkPoints = function(pointsText) {
+		//console.log(pointsText.text + this.points);
+		pointsText.text = "Points = " + this.points;
+}
+
+Player.prototype.getPoints = function() {
+	return this.points;
 }

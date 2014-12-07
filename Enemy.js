@@ -18,7 +18,7 @@ Enemy.prototype.create = function() {
 };
 
 Enemy.prototype.update = function() {
-	
+	//this.enemyGroup.bringToTop(enemyGroup.);
 };
 
 Enemy.prototype.preload = function() {
@@ -29,5 +29,15 @@ Enemy.prototype.makeEnemy = function(x, y) {
 	var enemy = this.enemyGroup.create(x, y, 'enemy');
 	enemy.bringToTop();
 	this.game.physics.arcade.enable(enemy);
+	//enemy.bringToTop();
+	//enemy.z = 10;
 	return enemy;
+}
+
+Enemy.prototype.makeRandomEnemy = function() {
+	x = parseInt(Math.random() * 1000) % 640;
+	y = parseInt(Math.random() * 1000) % 448 + 32;
+
+	this.makeEnemy(x,y);
+
 }

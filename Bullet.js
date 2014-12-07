@@ -7,11 +7,9 @@ function Bullet(game) {
 }
 
 Bullet.prototype.create = function(x, y, direction) {
-	//this.bullet = this.game.add.sprite(this.x, this.y, 'bullet');
 	this.bullet = this.group.create(x, y, 'bullet');
 	this.game.physics.enable(this.bullet);
 
-	//this.bullet = this.group.create(this.x, this.y, 'bullet');
 	if(direction == 1)
 		this.bullet.body.velocity.y = -this.speed;
 	else if(direction == 2)
@@ -30,6 +28,6 @@ Bullet.prototype.preload = function() {
 };
 
 Bullet.prototype.killHim = function(bullet, enemy) {
-	enemy.kill();
-	bullet.destroy();
+	enemy.kill(); //Why kill?
+	bullet.kill();
 };
