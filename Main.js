@@ -169,7 +169,7 @@ levelState = {
   	create: function() {
   		game.add.sprite(0,0, 'end');
   		game.input.onUp.add(function() {
-  			game.state.start('level');
+  			game.state.start('menu');
   		});
   	},
 
@@ -182,7 +182,8 @@ levelState = {
   function lostLive(enemy, surprise) {
   	surprise.kill();
   	enemy.kill();
-  	lives.pop().destroy();
+  	if(lives.length) > 0
+  		lives.pop().destroy();
 
   	if(lives.length == 0)
   		goHome();
