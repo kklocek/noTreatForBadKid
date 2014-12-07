@@ -10,6 +10,7 @@ var surprises;
 var level = 1;
 var menuState;
 var authorsState;
+var timer;
 //var points = 0;
 
 window.onload = function() {
@@ -93,7 +94,7 @@ levelState = {
 		for(var i = 0; i < 3; i++)
 			lives.push(game.add.sprite(i * 32 + 5, 0, 'surprise1'));
 
-		game.time.events.loop((5 - level) * 1000, enemy.makeRandomEnemy, enemy);
+		timer = game.time.events.loop((5 - level) * 1000, enemy.makeRandomEnemy, enemy);
 	  	
     },
     
@@ -111,8 +112,19 @@ levelState = {
 		var pts = player.getPoints();
 		pointsText.setText("Score = " + pts);
 		game.world.bringToTop(pointsText);
-		if(pts % 5 == 0)
+		if(pts % 5 == 0) {
+			if(level <=5){
 			level++;
+			game.time.events.remove(timer);
+			timer = game.time.events.loop((5 - level)*1000, enemy.makeRandomEnemy, enemy);
+			}
+			else
+			{
+				level++;
+				game.time.events.remove(timer);
+				timer = game.time.events.loop((5/level)*1000, enemy.makeRandomEnemy, enemy);
+			}
+		}
 		//pointsText.z = 5;
     }
 		
