@@ -24,7 +24,7 @@ Bullet.prototype.create = function(x, y, direction) {
 };
 
 Bullet.prototype.preload = function() {
-	this.game.load.image('bullet', 'gfx/bullet.png');
+	this.game.load.image('bullet', 'gfx/star.png');
 };
 
 Bullet.prototype.killHim = function(bullet, enemy) {

@@ -11,13 +11,60 @@ var level = 1;
 var menuState;
 var authorsState;
 var timer;
+var end;
 //var points = 0;
 
 window.onload = function() {
 	game = new Phaser.Game(640,480, Phaser.CANVAS, "gameWindow");
 	game.state.add('level', levelState);
-	game.state.start('level');
+	game.state.add('end', end);
+	game.state.add('menu', menuState);
+	game.state.add('authors', authorsState);
+	game.state.start('menu');
 	
+}
+
+
+menuState = {
+	preload: function() {
+		game.load.image('menu', 'gfx/menu.png');
+		game.load.image('play', 'gfx/play.png');
+		game.load.image('authorsAbout', 'gfx/authors.png');
+
+	},
+
+	create: function() {
+		game.add.sprite(0,0, 'menu');
+		game.add.button(400, 100, 'play', function(){game.state.start('level');});
+		game.add.button(400, 250, 'authorsAbout', function(){game.state.start('authors');});
+	}
+}
+
+authorsState = {
+	preload: function() {
+		game.load.image('what', 'gfx/whatt.png');
+		game.load.image('play', 'gfx/play.png');
+		//game.load.image('authorsAbout', 'gfx/authors.png');
+
+	},
+
+	create: function() {
+		game.add.sprite(0,0, 'what');
+		game.add.button(10, 320, 'play', function(){game.state.start('level');});
+		//game.add.button(400, 250, 'authorsAbout', function(){game.state.start('level');});
+
+		game.add.text(10, 10, "Graphics: Alicja Warchal & Robert Poparda (great thanks!), programming: Konrad Klocek", {
+        font: '14px Arial',
+        fill: '#fff',
+        align: 'center'
+      	});
+
+      	game.add.text(250, 450, "Controls: arrows to move, control to shoot", {
+        font: '14px Arial',
+        fill: '#fff',
+        align: 'center'
+      	});
+	}
 }
 
 levelState = {
@@ -49,7 +96,6 @@ levelState = {
         fill: '#fff',
         align: 'center'
       	});
-		//pointsText.anchor.setTo(0.0, 0.0);
 		game.world.setBounds(0,0, 640, 480);
 
 
@@ -88,8 +134,6 @@ levelState = {
 
 
 	  	player.create();
-		//enemyInstance = enemy.makeEnemy(10, 50); //Dorzucić losowanie przeciwników w zależności od lvl
-		//game.add.image(0,0, 'tile');
 		
 		for(var i = 0; i < 3; i++)
 			lives.push(game.add.sprite(i * 32 + 5, 0, 'surprise1'));
@@ -103,10 +147,6 @@ levelState = {
 		//enemy.update();
 		game.world.bringToTop(enemy.enemyGroup);
 		game.world.bringToTop(bullet.group);
-		//player.checkPoints(pointsText);
-		//game.physics.arcade.moveToObject(enemyInstance, surprises, enemy.speedToSurprise);
-		//game.physics.arcade.moveToXY(enemyInstance, 216, 116, enemy.speedToSurprise);
-		//game.physics.arcade.collide(bullet.group, enemy.enemyGroup, bullet.killHim);
 		game.physics.arcade.collide(enemy.enemyGroup, surprises, lostLive);
 		game.physics.arcade.collide(bullet.group, enemy.enemyGroup, player.addPoints, null,player);
 		var pts = player.getPoints();
@@ -115,19 +155,28 @@ levelState = {
 		if(pts % 5 == 0) {
 			if(level <=5){
 			level++;
-			game.time.events.remove(timer);
-			timer = game.time.events.loop((5 - level)*1000, enemy.makeRandomEnemy, enemy);
-			}
-			else
-			{
-				level++;
-				game.time.events.remove(timer);
-				timer = game.time.events.loop((5/level)*1000, enemy.makeRandomEnemy, enemy);
 			}
 		}
-		//pointsText.z = 5;
     }
 		
+  }
+
+  end = {
+  	preload: function() {
+  		game.load.image('end', 'gfx/end.png');
+  	},
+
+  	create: function() {
+  		game.add.sprite(0,0, 'end');
+  		game.input.onUp.add(function() {
+  			game.state.start('level');
+  		});
+  	},
+
+  	update: function() {
+
+  	}
+
   }
 
   function lostLive(enemy, surprise) {
@@ -136,7 +185,20 @@ levelState = {
   	lives.pop().destroy();
 
   	if(lives.length == 0)
-  		return;
+  		goHome();
+	}
+
+	function goHome() {
+		var gameOverText = game.add.text(game.world.centerX, game.world.centerY, 'GAME OVER', {
+        font: '80px Arial',
+        fill: '#fff',
+        align: 'center'
+      });
+      gameOverText.anchor.setTo(0.5, 0.5);
+      
+      game.input.onUp.add(function() {
+		  game.state.start('end');
+	  });
 	}
   
 })()
