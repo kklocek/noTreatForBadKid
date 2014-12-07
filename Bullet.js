@@ -3,7 +3,7 @@ function Bullet(game) {
 	this.game = game;
 	this.group = this.game.add.physicsGroup(Phaser.Physics.ARCADE);
 	this.bullet = null;
-	this.speed = 100;
+	this.speed = 300;
 }
 
 Bullet.prototype.create = function(x, y, direction) {

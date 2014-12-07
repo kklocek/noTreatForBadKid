@@ -8,16 +8,18 @@ var pointsText;
 var lives = [];
 var surprises;
 var level = 1;
+var menuState;
+var authorsState;
 //var points = 0;
 
 window.onload = function() {
 	game = new Phaser.Game(640,480, Phaser.CANVAS, "gameWindow");
-	game.state.add('level', testState);
+	game.state.add('level', levelState);
 	game.state.start('level');
 	
 }
 
-testState = {
+levelState = {
 	preload: function() {
 
 		//Sorry, but I have to end this game...
@@ -46,7 +48,7 @@ testState = {
         fill: '#fff',
         align: 'center'
       	});
-		pointsText.anchor.setTo(0.0, 0.0);
+		//pointsText.anchor.setTo(0.0, 0.0);
 		game.world.setBounds(0,0, 640, 480);
 
 
@@ -85,13 +87,13 @@ testState = {
 
 
 	  	player.create();
-		enemyInstance = enemy.makeEnemy(10, 50); //Dorzucić losowanie przeciwników w zależności od lvl
+		//enemyInstance = enemy.makeEnemy(10, 50); //Dorzucić losowanie przeciwników w zależności od lvl
 		//game.add.image(0,0, 'tile');
 		
 		for(var i = 0; i < 3; i++)
 			lives.push(game.add.sprite(i * 32 + 5, 0, 'surprise1'));
 
-		game.time.events.loop(5 / level * 1000, enemy.makeRandomEnemy, enemy);
+		game.time.events.loop((5 - level) * 1000, enemy.makeRandomEnemy, enemy);
 	  	
     },
     
@@ -102,11 +104,16 @@ testState = {
 		game.world.bringToTop(bullet.group);
 		//player.checkPoints(pointsText);
 		//game.physics.arcade.moveToObject(enemyInstance, surprises, enemy.speedToSurprise);
-		game.physics.arcade.moveToXY(enemyInstance, 216, 116, enemy.speedToSurprise);
+		//game.physics.arcade.moveToXY(enemyInstance, 216, 116, enemy.speedToSurprise);
 		//game.physics.arcade.collide(bullet.group, enemy.enemyGroup, bullet.killHim);
 		game.physics.arcade.collide(enemy.enemyGroup, surprises, lostLive);
-		game.physics.arcade.collide(bullet.group, enemy.enemyGroup, player.addPoints);
-		pointsText.text = "Score = " + player.getPoints();
+		game.physics.arcade.collide(bullet.group, enemy.enemyGroup, player.addPoints, null,player);
+		var pts = player.getPoints();
+		pointsText.setText("Score = " + pts);
+		game.world.bringToTop(pointsText);
+		if(pts % 5 == 0)
+			level++;
+		//pointsText.z = 5;
     }
 		
   }

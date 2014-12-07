@@ -34,10 +34,13 @@ Enemy.prototype.makeEnemy = function(x, y) {
 	return enemy;
 }
 
-Enemy.prototype.makeRandomEnemy = function() {
-	x = parseInt(Math.random() * 1000) % 640;
-	y = parseInt(Math.random() * 1000) % 448 + 32;
+Enemy.prototype.makeRandomEnemy = function(enemyGroup) {
+	var x = parseInt(Math.random() * 1000) % 640;
+	var y = parseInt(Math.random() * 1000) % 448 + 32;
 
-	this.makeEnemy(x,y);
-
+	//this.makeEnemy(x,y);
+	var enemy = this.enemyGroup.create(x, y, 'enemy');
+	enemy.bringToTop();
+	this.game.physics.arcade.enable(enemy);
+	this.game.physics.arcade.moveToXY(enemy, 216, 116, this.speedToSurprise);
 }
